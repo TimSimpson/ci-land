@@ -28,6 +28,7 @@ echo '
 '
 echo "TRAVIS_BRANCH=${TRAVIS_BRANCH}"
 
+"${scripts_dir}"/../package.sh settings
 
 if [[ "${TRAVIS_BRANCH}" == 'master' ]]; then
     export CONAN_USERNAME=TimSimpson

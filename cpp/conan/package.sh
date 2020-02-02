@@ -39,6 +39,18 @@ function check_upload_settings(){
     fi
 }
 
+function cmd_settings(){
+    echo "
+    Paths:
+          package_reference        - ${package_reference}
+          package_name_and_version - ${package_name_and_version}
+          source_folder            - ${source_folder}
+          install_folder           - ${install_folder}
+          build_folder             - ${build_folder}
+          package_folder           - ${package_folder}
+    "
+}
+
 function cmd_clean(){
     if [ -d "${output_dir}" ]; then
         rm -r "${output_dir}"
@@ -101,6 +113,7 @@ function show_help() {
           test        - tests package "${package_name_and_version}"
           all         - do all of the above
           upload      - uploads "${package_reference}"
+          settings    - show paths and other variables
     "
 }
 
@@ -122,6 +135,7 @@ case "${cmd}" in
     "test" ) cmd_test $@;;
     "all" ) cmd_all $@;;
     "upload" ) cmd_upload $@;;
+    "settings" ) cmd_settings $@;;
     * )
         echo "'${cmd}' is not a valid command."
         echo
