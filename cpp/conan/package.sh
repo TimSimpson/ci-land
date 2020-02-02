@@ -40,7 +40,9 @@ function check_upload_settings(){
 }
 
 function cmd_clean(){
-    rm -r "${output_dir}"
+    if [ -d "${output_dir}" ]; then
+        rm -r "${output_dir}"
+    fi
 }
 
 function cmd_source(){
