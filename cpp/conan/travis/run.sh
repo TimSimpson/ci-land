@@ -23,7 +23,19 @@ python --version
 # "${scripts_dir}"/../run.sh
 "${scripts_dir}"/../package.sh all
 
-if [ $TRAVIS_BRANCH = "master" ]; then
-    "${scripts_dir}"/../package.sh all
+echo '
+
+    What is happening?
+             Hreerm??!
+
+'
+echo "TRAVIS_BRANCH=${TRAVIS_BRANCH}"
+
+
+if [[ "${TRAVIS_BRANCH}" == 'master' ]]; then
+    export CONAN_USERNAME=TimSimpson
+    export CONAN_CHANNEL=testing
     "${scripts_dir}"/../package.sh upload
+else
+    "${scripts_dir}"/../package.sh all
 fi
