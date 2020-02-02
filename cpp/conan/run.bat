@@ -7,7 +7,7 @@ if "%~1"=="" (
 
 set conan_profile=%1
 set script_dir=%~dp0
-set root_dir=%script_dir%\..
+set root_dir=%script_dir%\..\..\..
 set profile_path=%script_dir%\profiles\%conan_profile%
 set build_dir=%root_dir%\output\%conan_profile%
 

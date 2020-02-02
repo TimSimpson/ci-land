@@ -6,7 +6,7 @@ fi
 
 set -euo pipefail
 readonly root_dir="$(pwd)"
-readonly scripts_dir="${root_dir}/ci"
+readonly scripts_dir="${root_dir}/ci/cpp/conan"
 readonly output_dir="${root_dir}/output"
 readonly profile_path="${scripts_dir}/profiles/${PROFILE}"
 readonly build_dir="${output_dir}/${PROFILE}"
