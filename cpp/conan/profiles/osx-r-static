@@ -1,0 +1,9 @@
+include(clang-8)
+
+[settings]
+os_build=Macos
+os=Macos
+build_type=Release
+
+[options]
+*:shared=False

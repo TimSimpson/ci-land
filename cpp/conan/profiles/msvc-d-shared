@@ -1,0 +1,9 @@
+include(msvc)
+
+[settings]
+build_type=Debug
+
+[options]
+*:shared=True
+
+

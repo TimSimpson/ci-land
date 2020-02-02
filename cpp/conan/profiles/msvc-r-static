@@ -1,0 +1,9 @@
+include(msvc)
+
+[settings]
+build_type=Release
+
+[options]
+*:shared=False
+
+

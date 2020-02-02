@@ -1,0 +1,9 @@
+include(clang-8)
+
+[settings]
+os_build=Linux
+os=Linux
+build_type=Debug
+
+[options]
+*:shared=False
