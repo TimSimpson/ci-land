@@ -20,9 +20,6 @@ fi
 echo 'What version of Python is this?'
 python --version
 
-# "${scripts_dir}"/../run.sh
-"${scripts_dir}"/../package.sh all
-
 echo '
 
     What is happening?
