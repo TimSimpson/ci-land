@@ -20,4 +20,10 @@ fi
 echo 'What version of Python is this?'
 python --version
 
-"${scripts_dir}"/../run.sh
+# "${scripts_dir}"/../run.sh
+"${scripts_dir}"/../package.sh all
+
+if [ $TRAVIS_BRANCH = "master" ]; then
+    "${scripts_dir}"/../package.sh all
+    "${scripts_dir}"/../package.sh upload
+fi

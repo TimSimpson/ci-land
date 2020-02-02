@@ -29,4 +29,5 @@ else
 fi
 
 conan remote add bincrafters https://api.bintray.com/conan/bincrafters/public-conan
+conan remote add richter https://api.bintray.com/conan/timsimpson/richter
 conan user

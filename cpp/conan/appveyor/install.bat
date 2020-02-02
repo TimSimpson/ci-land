@@ -8,4 +8,5 @@ set PATH=%PYTHON%\Scripts;%PATH%
 
 call pip.exe install conan --upgrade
 call conan remote add bincrafters https://api.bintray.com/conan/bincrafters/public-conan
+call conan remote add richter https://api.bintray.com/conan/timsimpson/richter
 call conan user

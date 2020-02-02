@@ -21,6 +21,24 @@ if [ ! -f "${profile_path}" ]; then
     exit 1
 fi
 
+# Extracts the package and version from the root conan file.
+readonly package_name_and_version=`"${scripts_dir}/print_version.sh"`
+
+readonly package_reference="${package_name_and_version}"@"${CONAN_USERNAME:-_}"/"${CONAN_CHANNEL:-_}"
+
+function check_upload_settings(){
+    # Call this to abort the program if the user hasn't set the username /
+    # channel to something serious.
+    if [ "${CONAN_USERNAME:-_}" == "_" ]; then
+        echo "CONAN_USERNAME is not set. Aborting!"
+        exit 1;
+    fi
+    if [ "${CONAN_CHANNEL:-_}" == "_" ]; then
+        echo "CONAN_CHANNEL is not set. Aborting!"
+        exit 1;
+    fi
+}
+
 function cmd_clean(){
     rm -r "${output_dir}"
 }
@@ -50,31 +68,22 @@ function cmd_export(){
 }
 
 function cmd_test(){
-    if [ $# -lt 1 ]; then
-        echo 'Expect the name of the package under test as an argument.'
-        echo 'Example: `foobar/1.2.3.4`'
-        exit 1
-    fi
-    local package_name="${1}"
-    conan test test_package -pr="${profile_path}" \
-        "${package_name}"@"${CONAN_USERNAME:-_}"/"${CONAN_CHANNEL:-_}"
+    conan test test_package -pr="${profile_path}" "${package_reference}"
 }
 
 function cmd_all(){
-    if [ $# -lt 1 ]; then
-        echo 'Expect the name of the package under test as an argument.'
-        echo 'Example: `foobar/1.2.3.4`'
-        exit 1
-    fi
-    local package_name="${1}"
-
     cmd_clean
     cmd_source
     cmd_install
     cmd_build
     cmd_package
     cmd_export
-    cmd_test "${package_name}"
+    cmd_test
+}
+
+function cmd_upload(){
+    check_upload_settings
+    conan upload "${package_reference}" --all -r richter
 }
 
 function show_help() {
@@ -87,8 +96,9 @@ function show_help() {
           build       - build in ${build_folder}
           package     - package in ${package_folder}
           export      - export package to local cache
-          test        - test package
+          test        - tests package "${package_name_and_version}"
           all         - do all of the above
+          upload      - uploads "${package_reference}"
     "
 }
 
@@ -109,6 +119,7 @@ case "${cmd}" in
     "export" ) cmd_export $@;;
     "test" ) cmd_test $@;;
     "all" ) cmd_all $@;;
+    "upload" ) cmd_upload $@;;
     * )
         echo "'${cmd}' is not a valid command."
         echo
