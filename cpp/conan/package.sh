@@ -55,6 +55,9 @@ function cmd_clean(){
     if [ -d "${output_dir}" ]; then
         rm -r "${output_dir}"
     fi
+    if [ -d "${root_dir}"/test_package/build ]; then
+        rm -r "${root_dir}"/test_package/build
+    fi
 }
 
 function cmd_source(){
