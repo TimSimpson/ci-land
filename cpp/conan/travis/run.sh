@@ -20,12 +20,6 @@ fi
 echo 'What version of Python is this?'
 python --version
 
-echo '
-
-    What is happening?
-             Hreerm??!
-
-'
 echo "TRAVIS_BRANCH=${TRAVIS_BRANCH}"
 
 "${scripts_dir}"/../package.sh settings
@@ -33,6 +27,7 @@ echo "TRAVIS_BRANCH=${TRAVIS_BRANCH}"
 if [[ "${TRAVIS_BRANCH}" == 'master' ]]; then
     export CONAN_USERNAME=TimSimpson
     export CONAN_CHANNEL=testing
+    "${scripts_dir}"/../package.sh all
     "${scripts_dir}"/../package.sh upload
 else
     "${scripts_dir}"/../package.sh all
