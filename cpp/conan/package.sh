@@ -67,7 +67,7 @@ function cmd_source(){
 
 function cmd_install(){
     mkdir -p "${install_folder}"
-    conan install . --install-folder="${install_folder}" -pr="${profile_path}"
+    conan install . --install-folder="${install_folder}" -pr="${profile_path}"  --build missing
 }
 
 function cmd_build(){
