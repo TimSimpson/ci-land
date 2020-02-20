@@ -12,5 +12,5 @@ BinPackParameters: true
 
 # Turn this one to indent function defs that are > 1 line
 # IndentWrappedFunctionNames: true
-ContinuationIndentWidth: 2
+# ContinuationIndentWidth: 8
 # ConstructorInitializerIndentWidth: 8
