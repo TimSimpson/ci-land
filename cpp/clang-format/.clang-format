@@ -1,5 +1,7 @@
 BasedOnStyle: LLVM
 BreakBeforeBinaryOperators: All
+# BreakConstructorInitializersStyle: BeforeColon
+ConstructorInitializerAllOnOneLineOrOnePerLine: true
 IndentWidth: 4
 NamespaceIndentation: Inner
 
