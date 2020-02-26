@@ -71,15 +71,17 @@ def generate_contents(git_sha: str, routines: t.List[str], extra_env: t.List[str
     lines.extend(OPENING.format(git_sha=git_sha).split("\n"))
 
     for routine in routines:
-        if routine == 'cpp/docs':
+        if 'msvc' in routine:
+            continue
+        elif routine == 'cpp/docs':
             lines.extend(DOCS_MATRIX.split('\n'))
         else:
             profile = routine.split("/")[-1]
             cute_name = CUTE_NAMES[profile]
             lines.append(f'    - name: "{cute_name}"')
-            lines.append(f'    <<: *clang-linux')
-            lines.append(f'    env:')
-            lines.append(f'      - PROFILE={profile}')
+            lines.append(f'      <<: *clang-linux')
+            lines.append(f'      env:')
+            lines.append(f'        - PROFILE={profile}')
 
     lines.append("env:")
     lines.append("  global:")

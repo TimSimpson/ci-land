@@ -1,9 +1,11 @@
 import argparse
 import configparser
+import os
 import pathlib
 import sys
 import typing as t
 
+from . import appveyor
 from . import travis
 
 class ConfFile:
@@ -14,10 +16,11 @@ class ConfFile:
 
 
 def load_conf(path: pathlib.Path) -> ConfFile:
+    git_sha = os.environ["CI_LAND_SHA"]
+
     with open(path) as f:
         lines = f.readlines()
 
-    git_sha = lines[0].strip()
     routines: t.List[str] = []
     travis_env: t.List[str] = []
 
@@ -25,9 +28,7 @@ def load_conf(path: pathlib.Path) -> ConfFile:
     section = None
     for index, line in enumerate(lines):
         stripped = line.strip()
-        if index == 0:
-            continue
-        elif not stripped:
+        if not stripped:
             continue
         elif stripped.startswith('[') and stripped.endswith(']'):
             section = stripped
@@ -47,6 +48,13 @@ def print_conf_details(conf: ConfFile) -> None:
         print(f" * {routine}")
 
 
+def create_appveyor_yml(conf: ConfFile, root: pathlib.Path) -> None:
+    appveyor_path = root / "appveyor.yml"
+    appveyor_contents = appveyor.generate_contents(git_sha=conf.git_sha, routines=conf.routines)
+    with open(appveyor_path, "w") as f:
+        f.write(appveyor_contents)
+
+
 def create_travis_yml(conf: ConfFile, root: pathlib.Path) -> None:
     travis_path = root / ".travis.yml"
     travis_contents = travis.generate_contents(git_sha=conf.git_sha, routines=conf.routines, extra_env=conf.travis_env)
@@ -60,8 +68,8 @@ def format(project_path: pathlib.Path) -> None:
         raise RuntimeError(f"Cannot find configuration at {conf_path}.")
     conf = load_conf(conf_path)
     print_conf_details(conf)
+    create_appveyor_yml(conf, project_path.parent)
     create_travis_yml(conf, project_path.parent)
-    # create_travis_yml(conf, project_path.path / ".travis.yml")
 
 def main() -> int:
     parser = argparse.ArgumentParser(

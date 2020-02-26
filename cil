@@ -19,7 +19,8 @@ function cmd_format() {
 }
 
 function cmd_generate() {
-    PYTHONPATH="${script_dir}" python "${script_dir}"/cil_format.py "${@}"
+    local sha=$(cd "${script_dir}" > /dev/null 2>&1 && git rev-parse HEAD)
+    CI_LAND_SHA="${sha}" PYTHONPATH="${script_dir}" python "${script_dir}"/cil_format.py "${@}"
 }
 
 function cmd_profiles() {
