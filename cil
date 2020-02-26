@@ -1,0 +1,69 @@
+#! /bin/bash
+set -euo pipefail
+
+readonly relative_script_dir=$(dirname "${BASH_SOURCE[0]}")
+readonly script_dir=$(cd "${relative_script_dir}" >/dev/null 2>&1 && pwd)
+
+
+function cmd_cpp() {
+    "${script_dir}/cpp/run.sh" "${@}"
+}
+
+function cmd_build() {
+    "${script_dir}/cpp/conan/build.sh" "${@}"
+}
+
+function cmd_format() {
+    "${script_dir}/cpp/clang-format/run.sh" "${@}"
+    "${script_dir}/cpp/clang-format/run.sh" "${@}"
+}
+
+function cmd_profiles() {
+    local profiles=($(ls "${script_dir}/cpp/conan/profiles"))
+    echo "Profiles:"
+    for profile in "${profiles[@]}"
+    do
+        echo "    ${profile}"
+    done
+    echo ""
+}
+
+function cmd_run() {
+    "${script_dir}/cpp/conan/run.sh" "${@}"
+}
+
+function cmd_splash() {
+  cat "${script_dir}/splash.txt"
+}
+
+function show_help() {
+    echo "Usage: ${0} [command]"
+    echo "
+    Commands:
+          profiles    - Show list of Conan profiles
+          build       - Builds C++ stuff (call run first)
+          format      - Formats code
+          run         - Installs and builds C++ stuff
+          splash      - Really important picture with a bird
+    "
+}
+
+if [ $# -lt 1 ]; then
+    show_help
+    exit 1
+fi
+
+readonly cmd="${1}"
+shift 1;
+
+case "${cmd}" in
+    "build" ) cmd_build $@;;
+    "profiles" ) cmd_profiles $@;;
+    "run" ) cmd_run $@;;
+    "splash" ) cmd_splash $@;;
+    * )
+        echo "'${cmd}' is not a valid command."
+        echo
+        show_help
+        exit 1
+esac

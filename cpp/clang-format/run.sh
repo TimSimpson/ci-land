@@ -1,11 +1,11 @@
 #!/bin/bash
 set -euo pipefail
 readonly root_dir="$(pwd)"
-readonly script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd)"
+readonly relative_scripts_dir=$(dirname "${BASH_SOURCE[0]}")
+readonly scripts_dir=$(cd "${relative_scripts_dir}" >/dev/null 2>&1 && pwd)
 readonly output_dir="${root_dir}/output/clang-format"
 
 cp "${script_dir}/.clang-format" "${root_dir}/.clang-format"
-echo "hi"
 mkdir -p "${output_dir}"
 echo $script_dir
 #cmake -P "${script_dir}/RunClangFormat.cmake" -D "source:string=${root_dir}"
