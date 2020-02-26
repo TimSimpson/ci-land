@@ -1,18 +1,10 @@
 BasedOnStyle: LLVM
+BinPackParameters: true
 BreakBeforeBinaryOperators: All
-# BreakConstructorInitializersStyle: BeforeColon
 ConstructorInitializerAllOnOneLineOrOnePerLine: true
+ContinuationIndentWidth: 8
+DerivePointerAlignment: false
 IndentWidth: 4
 NamespaceIndentation: Inner
-
-# BreakBeforeBraces: Allman
-#BraceWrapping:
-#      MultiLine
-
-# Long functions have one arg per line
-BinPackParameters: true
-
-# Turn this one to indent function defs that are > 1 line
-# IndentWrappedFunctionNames: true
-ContinuationIndentWidth: 8
-# ConstructorInitializerIndentWidth: 0
+PointerAlignment: Middle
+PointerBindsToType: true

@@ -15,7 +15,7 @@ function cmd_build() {
 
 function cmd_format() {
     "${script_dir}/cpp/clang-format/run.sh" "${@}"
-    "${script_dir}/cpp/clang-format/run.sh" "${@}"
+    "${script_dir}/cpp/cmake-format/run.sh" "${@}"
 }
 
 function cmd_profiles() {
@@ -32,6 +32,10 @@ function cmd_run() {
     "${script_dir}/cpp/conan/run.sh" "${@}"
 }
 
+function cmd_package() {
+  $"{script_dir}/cpp/conan/package.sh" "${@}"
+}
+
 function cmd_splash() {
   cat "${script_dir}/splash.txt"
 }
@@ -43,6 +47,7 @@ function show_help() {
           profiles    - Show list of Conan profiles
           build       - Builds C++ stuff (call run first)
           format      - Formats code
+          package     - Runs package script
           run         - Installs and builds C++ stuff
           splash      - Really important picture with a bird
     "
@@ -58,6 +63,7 @@ shift 1;
 
 case "${cmd}" in
     "build" ) cmd_build $@;;
+    "format" ) cmd_format $@;;
     "profiles" ) cmd_profiles $@;;
     "run" ) cmd_run $@;;
     "splash" ) cmd_splash $@;;

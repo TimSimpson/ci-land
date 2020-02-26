@@ -1,0 +1,9 @@
+
+# BreakConstructorInitializersStyle: BeforeColon
+# BreakBeforeBraces: Allman
+#BraceWrapping:
+#      MultiLine
+# Long functions have one arg per line
+# Turn this one to indent function defs that are > 1 line
+# IndentWrappedFunctionNames: true
+# ConstructorInitializerIndentWidth: 0
