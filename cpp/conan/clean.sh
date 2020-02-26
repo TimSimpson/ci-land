@@ -5,8 +5,8 @@ if [ "${PROFILE}" == '' ]; then
     echo 'PROFILE environment variable not defined.'
     exit 1
 fi
-
-readonly scripts_dir="$(readlink -f "$(dirname "${BASH_SOURCE[0]}")")"
+readonly relative_scripts_dir=$(dirname "${BASH_SOURCE[0]}")
+readonly scripts_dir=$(cd "${relative_scripts_dir}" >/dev/null 2>&1 && pwd)
 readonly root_dir="${scripts_dir}/.."
 readonly output_dir="${root_dir}/output"
 readonly profile_path="${scripts_dir}/profiles/${PROFILE}"
