@@ -34,8 +34,8 @@ osx: &osx
    osx_image: xcode11.3
 
 install:
-  - git clone https://github.com/TimSimpson/ci-land.git
-  - pushd ci-land && git checkout {git_sha} && popd
+  - git clone https://github.com/TimSimpson/ci-land.git ci
+  - pushd ci && git checkout {git_sha} && popd
 
 script:
   - ./ci/cpp/conan/travis/run.sh

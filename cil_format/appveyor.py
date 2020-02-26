@@ -12,7 +12,7 @@ environment:
 CLOSING = """
 install:
   - git clone https://github.com/TimSimpson/ci-land.git ci
-  - cd ci-land
+  - cd ci
   - git checkout {git_sha}
   - cd ..
   - ci\\cpp\\conan\\appveyor\\install.bat
