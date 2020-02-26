@@ -11,7 +11,7 @@ environment:
 
 CLOSING = """
 install:
-  - git clone git@github.com:TimSimpson/ci-land.git ci
+  - git clone https://github.com/TimSimpson/ci-land.git ci
   - cd ci-land
   - git checkout {git_sha}
   - cd ..

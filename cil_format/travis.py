@@ -34,7 +34,7 @@ osx: &osx
    osx_image: xcode11.3
 
 install:
-  - git clone git@github.com:TimSimpson/ci-land.git
+  - git clone https://github.com/TimSimpson/ci-land.git
   - pushd ci-land && git checkout {git_sha} && popd
 
 script:
