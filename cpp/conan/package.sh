@@ -1,31 +1,66 @@
 #! /bin/bash
-if [ "${PROFILE}" == '' ]; then
-    echo 'PROFILE environment variable not defined.'
-    exit 1
-fi
-
 set -euo pipefail
+
+readonly script_name="${0}"
 readonly relative_scripts_dir=$(dirname "${BASH_SOURCE[0]}")
 readonly scripts_dir=$(cd "${relative_scripts_dir}" >/dev/null 2>&1 && pwd)
 readonly root_dir="$(pwd)"
-readonly output_dir="${root_dir}/output/package"
-readonly profile_path="${scripts_dir}/profiles/${PROFILE}"
-readonly build_dir="${output_dir}/${PROFILE}"
 
+set +u
+if [ "${PROFILE}" == '' ]; then
+    PROFILE='${PROFILE}'
+fi
+set -u
+
+readonly profile_path="${scripts_dir}/profiles/${PROFILE}"
+
+readonly output_root_dir="${root_dir}/output/package"
+readonly output_dir="${output_root_dir}/${PROFILE}"
 readonly source_folder="${output_dir}"/source
 readonly install_folder="${output_dir}"/install
 readonly build_folder="${output_dir}"/build
 readonly package_folder="${output_dir}"/package
 
-if [ ! -f "${profile_path}" ]; then
-    echo 'Conan profile file not found at '"${profile_path}"
+function profile_hint() {
+    echo 'See valid profiles using:'
+    echo
+    echo "      ${script_name} profiles"
+    echo
     exit 1
-fi
+}
+
+function require_valid_profile() {
+  if [ "${PROFILE}" == '${PROFILE}' ]; then
+      echo 'PROFILE environment variable not set. Set it to a valid profile.'
+      profile_hint
+      exit 1
+  fi
+  if [ ! -f "${profile_path}" ]; then
+      echo 'Conan profile file not found at '"${profile_path}"
+      profile_hint
+      exit 1
+  fi
+}
+
+function profile_warning() {
+    if [ ! -f "${profile_path}" ]; then
+        echo '    Warning: $PROFILE is invalid; Conan profile file not found at '"${profile_path}"
+        echo
+    fi
+}
 
 # Extracts the package and version from the root conan file.
-readonly package_name_and_version=`"${scripts_dir}/print_version.sh"`
 
-readonly package_reference="${package_name_and_version}"@"${CONAN_USERNAME:-_}"/"${CONAN_CHANNEL:-_}"
+function print_name_and_version(){
+    PYTHONPATH="${scripts_dir}"/version_extractor python conanfile.py
+}
+
+function print_package_reference(){
+    local package_name_and_version=$1
+    echo "${package_name_and_version}"@"${CONAN_USERNAME:-_}"/"${CONAN_CHANNEL:-_}"
+}
+
+
 
 function check_upload_settings(){
     # Call this to abort the program if the user hasn't set the username /
@@ -40,7 +75,21 @@ function check_upload_settings(){
     fi
 }
 
+function cmd_profiles(){
+    local profiles=($(ls "${scripts_dir}/profiles"))
+    echo "Profiles:"
+    for profile in "${profiles[@]}"
+    do
+        echo "    ${profile}"
+    done
+    echo ""
+    exit 1
+}
+
 function cmd_settings(){
+    local package_name_and_version=`print_name_and_version`
+    local package_reference=`print_package_reference "${package_name_and_version}"`
+
     echo "
     Paths:
           package_reference        - ${package_reference}
@@ -50,9 +99,11 @@ function cmd_settings(){
           build_folder             - ${build_folder}
           package_folder           - ${package_folder}
     "
+    profile_warning
 }
 
 function cmd_clean(){
+    require_valid_profile
     if [ -d "${output_dir}" ]; then
         rm -r "${output_dir}"
     fi
@@ -62,64 +113,95 @@ function cmd_clean(){
 }
 
 function cmd_source(){
+    require_valid_profile
     mkdir -p "${source_folder}"
     conan source . --source-folder="${source_folder}"
 }
 
 function cmd_install(){
+    require_valid_profile
     mkdir -p "${install_folder}"
     conan install . --install-folder="${install_folder}" -pr="${profile_path}"  --build missing
 }
 
 function cmd_build(){
+    require_valid_profile
     mkdir -p "${build_folder}"
     conan build . "--source-folder=${source_folder}" "--install-folder=${install_folder}" "--build-folder=${build_folder}"
 }
 
 function cmd_package(){
+    require_valid_profile
     mkdir -p "${package_folder}"
     conan package . "--source-folder=${source_folder}" "--install-folder=${install_folder}" "--build-folder=${build_folder}" "--package=${package_folder}"
 }
 
 function cmd_export(){
+    require_valid_profile
     conan export-pkg . -f "--package=${package_folder}" -pr="${profile_path}"
 }
 
 function cmd_test(){
+    require_valid_profile
+    pushd "${build_folder}"
+    ctest "${@}"
+    popd
+}
+
+function cmd_test_package(){
+    require_valid_profile
+    local package_name_and_version=`print_name_and_version`
+    local package_reference=`print_package_reference "${package_name_and_version}"`
+
     conan test test_package -pr="${profile_path}" "${package_reference}"
 }
 
 function cmd_all(){
+    require_valid_profile
     cmd_clean
     cmd_source
     cmd_install
     cmd_build
+    cmd_test
     cmd_package
     cmd_export
-    cmd_test
+    cmd_test_package
 }
 
 function cmd_upload(){
+    require_valid_profile
+
+    local package_name_and_version=`print_name_and_version`
+    local package_reference=`print_package_reference "${package_name_and_version}"`
+
     check_upload_settings
     conan upload "${package_reference}" --all -r richter
 }
 
 function show_help() {
-    echo "Usage: ${0} [command]"
+    local package_name_and_version=`print_name_and_version`
+    local package_reference=`print_package_reference "${package_name_and_version}"`
+
+    echo "Usage: ${script_name} [command]"
     echo "
     Commands:
-          clean       - Erase ${output_dir}
-          source      - run conan source, put in ${source_folder}
-          install     - install to ${install_folder}
-          build       - build in ${build_folder}
-          package     - package in ${package_folder}
-          export      - export package to local cache
-          test        - tests package "${package_name_and_version}"
-          all         - do all of the above
-          upload      - uploads "${package_reference}"
-          settings    - show paths and other variables
+          profiles     - List all profiles in ${scripts_dir}/profiles
+          clean        - Erase ${output_dir}
+          source       - run conan source, put in ${source_folder}
+          install      - install to ${install_folder}
+          build        - build in ${build_folder}
+          package      - package in ${package_folder}
+          export       - export package to local cache
+          test         - tests binaries in ${build_folder}
+          test_package - tests package "${package_name_and_version}"
+          all          - do all of the above
+          upload       - uploads "${package_reference}"
+          settings     - show paths and other variables
     "
+
+    profile_warning
 }
+
 
 if [ $# -lt 1 ]; then
     show_help
@@ -130,6 +212,7 @@ readonly cmd="${1}"
 shift 1;
 
 case "${cmd}" in
+    "profiles" ) cmd_profiles $@ ;;
     "clean" ) cmd_clean $@ ;;
     "source" ) cmd_source $@ ;;
     "install" ) cmd_install $@ ;;
@@ -137,6 +220,7 @@ case "${cmd}" in
     "package" ) cmd_package $@ ;;
     "export" ) cmd_export $@ ;;
     "test" ) cmd_test $@ ;;
+    "test_package" ) cmd_test_package $@ ;;
     "all" ) cmd_all $@ ;;
     "upload" ) cmd_upload $@ ;;
     "settings" ) cmd_settings $@ ;;

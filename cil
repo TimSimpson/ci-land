@@ -17,6 +17,10 @@ function cmd_clean() {
     "${script_dir}/cpp/conan/clean.sh" "${@}"
 }
 
+function cmd_conan() {
+    "${script_dir}/cpp/conan/conan.sh" "${@}"
+}
+
 function cmd_format() {
     "${script_dir}/cpp/clang-format/run.sh" "${@}"
     "${script_dir}/cpp/cmake-format/run.sh" "${@}"
@@ -60,6 +64,7 @@ function show_help() {
           profiles    - Show list of Conan profiles
           build       - Builds C++ stuff (call run first)
           clean       - Clean up output directory
+          conan       - Runs conan commands
           format      - Formats code
           generate    - Generates common CI configs
           package     - Runs package script
@@ -81,6 +86,7 @@ shift 1;
 case "${cmd}" in
     "build" ) cmd_build $@ ;;
     "clean" ) cmd_clean $@ ;;
+    "conan" ) cmd_conan $@ ;;
     "format" ) cmd_format $@ ;;
     "generate" ) cmd_generate $@ ;;
     "profiles" ) cmd_profiles $@ ;;
