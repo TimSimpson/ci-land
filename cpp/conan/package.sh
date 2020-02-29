@@ -130,16 +130,16 @@ readonly cmd="${1}"
 shift 1;
 
 case "${cmd}" in
-    "clean" ) cmd_clean $@;;
-    "source" ) cmd_source $@;;
-    "install" ) cmd_install $@;;
-    "build" ) cmd_build $@;;
-    "package" ) cmd_package $@;;
-    "export" ) cmd_export $@;;
-    "test" ) cmd_test $@;;
-    "all" ) cmd_all $@;;
-    "upload" ) cmd_upload $@;;
-    "settings" ) cmd_settings $@;;
+    "clean" ) cmd_clean $@ ;;
+    "source" ) cmd_source $@ ;;
+    "install" ) cmd_install $@ ;;
+    "build" ) cmd_build $@ ;;
+    "package" ) cmd_package $@ ;;
+    "export" ) cmd_export $@ ;;
+    "test" ) cmd_test $@ ;;
+    "all" ) cmd_all $@ ;;
+    "upload" ) cmd_upload $@ ;;
+    "settings" ) cmd_settings $@ ;;
     * )
         echo "'${cmd}' is not a valid command."
         echo

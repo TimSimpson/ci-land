@@ -42,15 +42,15 @@ function cmd_run() {
 }
 
 function cmd_package() {
-  $"{script_dir}/cpp/conan/package.sh" "${@}"
+    $"{script_dir}/cpp/conan/package.sh" "${@}"
 }
 
 function cmd_splash() {
-  cat "${script_dir}/splash.txt"
+    cat "${script_dir}/splash.txt"
 }
 
 function cmd_test() {
-  "${script_dir}/cpp/conan/test.sh" "${@}"
+    "${script_dir}/cpp/conan/test.sh" "${@}"
 }
 
 function show_help() {
@@ -79,14 +79,14 @@ readonly cmd="${1}"
 shift 1;
 
 case "${cmd}" in
-    "build" ) cmd_build $@;;
-    "clean" ) cmd_clean $@;;
-    "format" ) cmd_format $@;;
-    "generate" ) cmd_generate $@;;
-    "profiles" ) cmd_profiles $@;;
-    "run" ) cmd_run $@;;
-    "splash" ) cmd_splash $@;;
-    "test" ) cmd_test $@;;
+    "build" ) cmd_build $@ ;;
+    "clean" ) cmd_clean $@ ;;
+    "format" ) cmd_format $@ ;;
+    "generate" ) cmd_generate $@ ;;
+    "profiles" ) cmd_profiles $@ ;;
+    "run" ) cmd_run $@ ;;
+    "splash" ) cmd_splash $@ ;;
+    "test" ) cmd_test $@ ;;
     * )
         echo "'${cmd}' is not a valid command."
         echo
