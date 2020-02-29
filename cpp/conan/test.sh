@@ -17,8 +17,5 @@ if [ ! -f "${profile_path}" ]; then
     exit 1
 fi
 
-mkdir -p "${build_dir}"
 cd "${build_dir}"
-conan install "${root_dir}" -pr="${profile_path}" --build missing
-conan build "${root_dir}"
-ctest
+ctest "${@}"

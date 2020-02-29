@@ -49,6 +49,10 @@ function cmd_splash() {
   cat "${script_dir}/splash.txt"
 }
 
+function cmd_test() {
+  "${script_dir}/cpp/conan/test.sh" "${@}"
+}
+
 function show_help() {
     echo "Usage: ${0} [command]"
     echo "
@@ -61,10 +65,12 @@ function show_help() {
           package     - Runs package script
           run         - Installs and builds C++ stuff
           splash      - Really important picture with a bird
+          test        - Run ctests in build directory
     "
 }
 
 if [ $# -lt 1 ]; then
+    cmd_splash
     show_help
     exit 1
 fi
@@ -80,6 +86,7 @@ case "${cmd}" in
     "profiles" ) cmd_profiles $@;;
     "run" ) cmd_run $@;;
     "splash" ) cmd_splash $@;;
+    "test" ) cmd_test $@;;
     * )
         echo "'${cmd}' is not a valid command."
         echo
