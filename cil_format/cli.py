@@ -76,7 +76,7 @@ def main() -> int:
         "cil-format",
         description="Formats configs needed to run CI."
     )
-    parser.add_argument("project_path", type=str, help="Path to a project to format.")
+    parser.add_argument("--project_path", type=str, help="Path to a project to format.", default=".")
     args = parser.parse_args()
     project_path = pathlib.Path(args.project_path)
     if not project_path.exists():

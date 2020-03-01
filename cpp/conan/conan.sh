@@ -52,9 +52,12 @@ function cmd_build() {
   pushd "${build_dir}"
   conan build "${root_dir}"
   popd
+  set +u
   if [[ "${1}" == "test" ]]; then
+      set -u
       cmd_test
   fi
+  set -u
 }
 
 function cmd_clean(){
@@ -92,9 +95,12 @@ function cmd_rebuild() {
   pushd "${build_dir}"
   cmake --build .
   popd
+  set +u
   if [[ "${1}" == "test" ]]; then
+      set -u
       cmd_test
   fi
+  set -u
 }
 
 
