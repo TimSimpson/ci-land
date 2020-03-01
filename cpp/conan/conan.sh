@@ -48,6 +48,7 @@ function profile_warning() {
 }
 
 function cmd_build() {
+  require_valid_profile
   pushd "${build_dir}"
   conan build "${root_dir}"
   popd
@@ -61,6 +62,7 @@ function cmd_clean(){
 }
 
 function cmd_install() {
+  require_valid_profile
   mkdir -p "${build_dir}"
   pushd "${build_dir}"
   conan install "${root_dir}" -pr="${profile_path}" --build missing
