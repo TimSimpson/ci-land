@@ -52,6 +52,9 @@ function cmd_build() {
   pushd "${build_dir}"
   conan build "${root_dir}"
   popd
+  if [[ "${1}" == "test" ]]; then
+      cmd_test
+  fi
 }
 
 function cmd_clean(){
@@ -84,6 +87,17 @@ function cmd_profiles(){
     exit 1
 }
 
+function cmd_rebuild() {
+  require_valid_profile
+  pushd "${build_dir}"
+  cmake --build .
+  popd
+  if [[ "${1}" == "test" ]]; then
+      cmd_test
+  fi
+}
+
+
 function cmd_run() {
   cmd_install
   cmd_build
@@ -91,8 +105,9 @@ function cmd_run() {
 }
 
 function cmd_test() {
+
   pushd "${build_dir}"
-  ctest
+  CTEST_OUTPUT_ON_FAILURE=1 ctest
   popd
 }
 
@@ -106,6 +121,7 @@ function show_help() {
           install      - install to ${build_dir}
           package      - create and test package
           profiles     - list profiles
+          rebuild      - calls CMake directly in ${build_dir}
           run          - install, build, and test
           test         - run ctest in ${build_dir}
     "
@@ -128,6 +144,7 @@ case "${cmd}" in
     "install" ) cmd_install $@ ;;
     "package" ) cmd_package $@ ;;
     "profiles" ) cmd_profiles $@ ;;
+    "rebuild" ) cmd_rebuild $@ ;;
     "run" ) cmd_run $@ ;;
     "test" ) cmd_test $@ ;;
     * )
