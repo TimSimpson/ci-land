@@ -110,6 +110,11 @@ function cmd_clean(){
     if [ -d "${root_dir}"/test_package/build ]; then
         rm -r "${root_dir}"/test_package/build
     fi
+    local package_name_and_version=`print_name_and_version`
+    local package_reference=`print_package_reference "${package_name_and_version}"`
+    set +e
+    conan remove -f "${package_reference}"
+    set -e
 }
 
 function cmd_source(){
@@ -119,29 +124,39 @@ function cmd_source(){
 }
 
 function cmd_install(){
+    export CONAN_SKIP_TESTS=true
     require_valid_profile
     mkdir -p "${install_folder}"
     conan install . --install-folder="${install_folder}" -pr="${profile_path}"  --build missing
 }
 
 function cmd_build(){
+    export CONAN_SKIP_TESTS=true
     require_valid_profile
     mkdir -p "${build_folder}"
     conan build . "--source-folder=${source_folder}" "--install-folder=${install_folder}" "--build-folder=${build_folder}"
 }
 
 function cmd_package(){
+    export CONAN_SKIP_TESTS=true
     require_valid_profile
     mkdir -p "${package_folder}"
     conan package . "--source-folder=${source_folder}" "--install-folder=${install_folder}" "--build-folder=${build_folder}" "--package=${package_folder}"
 }
 
 function cmd_export(){
+    export CONAN_SKIP_TESTS=true
     require_valid_profile
+    local package_name_and_version=`print_name_and_version`
+    local package_reference=`print_package_reference "${package_name_and_version}"`
+    set +e
+    conan remove -f "${package_reference}"
+    set -e
     conan export-pkg . -f "--package=${package_folder}" -pr="${profile_path}"
 }
 
 function cmd_test(){
+    export CONAN_SKIP_TESTS=true
     require_valid_profile
     pushd "${build_folder}"
     ctest "${@}"
@@ -149,11 +164,12 @@ function cmd_test(){
 }
 
 function cmd_test_package(){
+    export CONAN_SKIP_TESTS=true
     require_valid_profile
     local package_name_and_version=`print_name_and_version`
     local package_reference=`print_package_reference "${package_name_and_version}"`
 
-    conan test test_package -pr="${profile_path}" "${package_reference}"
+    conan test test_package -pr="${profile_path}" --build "${package_reference}" "${package_reference}"
 }
 
 function cmd_all(){
@@ -166,6 +182,14 @@ function cmd_all(){
     cmd_package
     cmd_export
     cmd_test_package
+}
+
+function cmd_create() {
+    export CONAN_SKIP_TESTS=true
+    require_valid_profile
+    local package_name_and_version=`print_name_and_version`
+    local package_reference=`print_package_reference "${package_name_and_version}"`
+    conan create . "${package_reference}" -pr="${profile_path}"
 }
 
 function cmd_upload(){
@@ -195,6 +219,7 @@ function show_help() {
           test         - tests binaries in ${build_folder}
           test_package - tests package "${package_name_and_version}"
           all          - do all of the above
+          create       - run conan create
           upload       - uploads "${package_reference}"
           settings     - show paths and other variables
     "
@@ -221,6 +246,7 @@ case "${cmd}" in
     "export" ) cmd_export $@ ;;
     "test" ) cmd_test $@ ;;
     "test_package" ) cmd_test_package $@ ;;
+    "create" ) cmd_create $@ ;;
     "all" ) cmd_all $@ ;;
     "upload" ) cmd_upload $@ ;;
     "settings" ) cmd_settings $@ ;;
