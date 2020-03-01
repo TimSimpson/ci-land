@@ -169,7 +169,7 @@ function cmd_test_package(){
     local package_name_and_version=`print_name_and_version`
     local package_reference=`print_package_reference "${package_name_and_version}"`
 
-    conan test test_package -pr="${profile_path}" --build "${package_reference}" "${package_reference}"
+    conan test test_package -pr="${profile_path}"  --build missing "${package_reference}"
 }
 
 function cmd_all(){
