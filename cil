@@ -14,7 +14,9 @@ function cmd_build() {
 }
 
 function cmd_clean() {
-    "${script_dir}/cpp/conan/clean.sh" "${@}"
+    if [ -d "output" ]; then
+       rm -r output
+    fi
 }
 
 function cmd_conan() {
