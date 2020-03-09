@@ -47,6 +47,11 @@ function profile_warning() {
     fi
 }
 
+function cmd_bt() {
+  cmd_build
+  cmd_test
+}
+
 function cmd_build() {
   require_valid_profile
   pushd "${build_dir}"
@@ -106,8 +111,7 @@ function cmd_rebuild() {
 
 function cmd_run() {
   cmd_install
-  cmd_build
-  cmd_test
+  cmd_bt
 }
 
 function cmd_test() {
@@ -122,6 +126,7 @@ function show_help() {
     echo "Usage: ${script_name} [command]"
     echo "
     Commands:
+          bt           - build and run ctest in ${build_dir}
           build        - build in ${build_dir}
           clean        - Erase ${build_dir}
           install      - install to ${build_dir}
@@ -145,6 +150,7 @@ readonly cmd="${1}"
 shift 1;
 
 case "${cmd}" in
+    "bt" ) cmd_bt $@ ;;
     "build" ) cmd_build $@ ;;
     "clean" ) cmd_clean $@ ;;
     "install" ) cmd_install $@ ;;
