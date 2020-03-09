@@ -27,8 +27,10 @@ echo "TRAVIS_BRANCH=${TRAVIS_BRANCH}"
 if [[ "${TRAVIS_BRANCH}" == 'master' ]]; then
     export CONAN_USERNAME=TimSimpson
     export CONAN_CHANNEL=testing
+    "${scripts_dir}"/../conan.sh run
     "${scripts_dir}"/../package.sh all
     "${scripts_dir}"/../package.sh upload
 else
+    "${scripts_dir}"/../conan.sh run
     "${scripts_dir}"/../package.sh all
 fi
