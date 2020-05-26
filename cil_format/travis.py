@@ -12,7 +12,7 @@ clang-linux: &clang-linux
     apt:
       sources:
         - ubuntu-toolchain-r-test
-        - llvm-toolchain-trusty-8
+        - llvm-toolchain-bionic-8
       packages:
         - clang-8
         - libstdc++-8-dev
