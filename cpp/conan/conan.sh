@@ -135,6 +135,8 @@ function show_help() {
           rebuild      - calls CMake directly in ${build_dir}
           run          - install, build, and test
           test         - run ctest in ${build_dir}
+
+    TODO: maybe remove build and run? 'conan build' and 'conan run' replace them
     "
 
     profile_warning
