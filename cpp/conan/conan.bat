@@ -75,8 +75,10 @@ GOTO :EOF
 :profile_warning
     if "%PROFILE%"=="%%PROFILE%%" (
         ECHO     Warning: %%PROFILE%% not set. Set it to a valid profile.
+        GOTO :EOF
     )
     if exist %profile_path% (
+        rem whaddup
     ) else (
         ECHO     Warning: %%PROFILE%% is invalid; Conan profile file not found at "%profile_path%"
         ECHO .
@@ -126,13 +128,15 @@ GOTO :EOF
     cd %build_dir%
     call conan install %root_dir% -pr=%profile_path% --build missing
     if not %ERRORLEVEL%==0 (
+        set result=%ERRORLEVEL%
         cd %root_dir%
-        exit /b %ERRORLEVEL%
+        exit /b %result%
     )
     cd %root_dir%
 GOTO :EOF
 
 :cmd_package
+    CALL "%script_dir%\package.bat" %2 %3 %4 %5 %6 %7 %8 %9
 GOTO :EOF
 
 :cmd_profiles
@@ -155,8 +159,9 @@ GOTO :EOF
     set CTEST_OUTPUT_ON_FAILURE=1
     ctest
     if not %ERRORLEVEL%==0 (
+        set result=%ERRORLEVEL%
         cd %root_dir%
-        exit /b %ERRORLEVEL%
+        exit /b %result%
     )
     cd %root_dir%
 GOTO :EOF
