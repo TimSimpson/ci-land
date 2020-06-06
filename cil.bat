@@ -12,9 +12,16 @@ if "%arg%"=="" (
     exit /b 1
 )
 
-if "%arg%"=="build" GOTO cmd_run
+if "%arg%"=="build" (
+    CALL :cmd_run
+    exit /b %ERRORLEVEL%
+)
+if "%arg%"=="conan" (
+    CALL :cmd_conan %*
+    exit /b %ERRORLEVEL%
+)
 if "%arg%"=="clean" GOTO cmd_clean
-if "%arg%"=="profiles" GOTO cmd_profiles
+if "%arg%"=="profiles" GOTO cmd_profilescd
 
 ECHO "'%arg%' is not a valid command."
 exit /b 1
@@ -45,7 +52,7 @@ GOTO :EOF
 GOTO :EOF
 
 :cmd_conan
-CALL "%script_dir\cpp\conan\conan.bat" %*
+    CALL "%script_dir%\cpp\conan\conan.bat" %2 %3 %4 %5 %6 %7 %8 %9
 GOTO :EOF
 
 :cmd_profiles
