@@ -53,6 +53,7 @@ ECHO "%arg%" is not a valid command.
 exit /b 1
 
 :show_help
+    CALL :set_package_vars
     ECHO Usage: %script_name% [command]
     ECHO.
     ECHO    Commands:
