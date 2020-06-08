@@ -172,23 +172,31 @@ function cmd_test_package(){
     conan test test_package -pr="${profile_path}"  --build missing "${package_reference}"
 }
 
+function announce() {
+    set +e
+    which figlet
+    if [ "${?}" -eq 0 ]; then
+        figlet -f pagga $1
+    fi
+    set -e
+}
 function cmd_all(){
     require_valid_profile
-    figlet -f pagga clean
+    announce clean
     cmd_clean
-    figlet -f pagga source
+    announce source
     cmd_source
-    figlet -f pagga install
+    announce install
     cmd_install
-    figlet -f pagga build
+    announce build
     cmd_build
-    figlet -f pagga test
+    announce test
     cmd_test
-    figlet -f pagga package
+    announce package
     cmd_package
-    figlet -f pagga export
+    announce export
     cmd_export
-    figlet -f pagga test package
+    announce test package
     cmd_test_package
 }
 
