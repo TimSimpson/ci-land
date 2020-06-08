@@ -174,13 +174,21 @@ function cmd_test_package(){
 
 function cmd_all(){
     require_valid_profile
+    figlet -f pagga clean
     cmd_clean
+    figlet -f pagga source
     cmd_source
+    figlet -f pagga install
     cmd_install
+    figlet -f pagga build
     cmd_build
+    figlet -f pagga test
     cmd_test
+    figlet -f pagga package
     cmd_package
+    figlet -f pagga export
     cmd_export
+    figlet -f pagga test package
     cmd_test_package
 }
 
