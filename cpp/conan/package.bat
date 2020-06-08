@@ -155,11 +155,6 @@ GOTO :EOF
     )
 GOTO :EOF
 
-:cmd_bt
-    CALL :cmd_build
-    CALL :cmd_test
-GOTO :EOF
-
 :cmd_build
     set CONAN_SKIP_TESTS=true
     CALL :require_valid_profile
@@ -186,9 +181,19 @@ GOTO :EOF
     CALL :set_package_vars
     CALL conan remove -f %package_reference%
     if not %ERRORLEVEL%==0 (
-        exit /b %ERRORLEVEL%
+        echo Oh well! We're going to add it!
     )
     CALL conan export-pkg %root_dir% -f --package=%package_folder% -pr=%profile_path%
+    if not %ERRORLEVEL%==0 (
+        exit /b %ERRORLEVEL%
+    )
+GOTO :EOF
+
+:cmd_source
+    CALL :require_valid_profile
+    set dir=%source_folder%
+    CALL :make_dir
+    CALL conan source . --source-folder=%source_folder%
     if not %ERRORLEVEL%==0 (
         exit /b %ERRORLEVEL%
     )
@@ -239,15 +244,6 @@ GOTO :EOF
     CALL :profile_warning
 GOTO :EOF
 
-:cmd_source
-    CALL :require_valid_profile
-    if exist %source_folder% (
-        REM hi
-    ) else (
-        md %source_folder%
-    )
-    conan source . --source-folder=%source_folder%
-GOTO :EOF
 
 :cmd_run
     CALL :cmd_install
@@ -274,6 +270,42 @@ GOTO :EOF
     CALL :require_valid_profile
     CALL :set_package_vars
     CALL conan test test_package -pr=%profile_path% --build missing %package_reference%
+    if not %ERRORLEVEL%==0 (
+        exit /b %ERRORLEVEL%
+    )
+GOTO :EOF
+
+:cmd_all
+    CALL :require_valid_profile
+    CALL :cmd_clean
+    if not %ERRORLEVEL%==0 (
+        exit /b %ERRORLEVEL%
+    )
+    CALL :cmd_source
+    if not %ERRORLEVEL%==0 (
+        exit /b %ERRORLEVEL%
+    )
+    CALL :cmd_install
+    if not %ERRORLEVEL%==0 (
+        exit /b %ERRORLEVEL%
+    )
+    CALL :cmd_build
+    if not %ERRORLEVEL%==0 (
+        exit /b %ERRORLEVEL%
+    )
+    CALL :cmd_test
+    if not %ERRORLEVEL%==0 (
+        exit /b %ERRORLEVEL%
+    )
+    CALL :cmd_package
+    if not %ERRORLEVEL%==0 (
+        exit /b %ERRORLEVEL%
+    )
+    CALL :cmd_export
+    if not %ERRORLEVEL%==0 (
+        exit /b %ERRORLEVEL%
+    )
+    CALL :cmd_test_package
     if not %ERRORLEVEL%==0 (
         exit /b %ERRORLEVEL%
     )
