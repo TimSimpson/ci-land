@@ -59,6 +59,10 @@ function cmd_test() {
     "${script_dir}/cpp/conan/test.sh" "${@}"
 }
 
+function cmd_vcpkg() {
+    "${script_dir}/cpp/vcpkg/vcpkg.sh" "${@}"
+}
+
 function show_help() {
     echo "Usage: ${0} [command]"
     echo "
@@ -73,6 +77,7 @@ function show_help() {
           run         - Installs and builds C++ stuff
           splash      - Really important picture with a bird
           test        - Run ctests in build directory
+          vcpkg       - Runs vcpkg commands
     "
 }
 
@@ -95,6 +100,7 @@ case "${cmd}" in
     "run" ) cmd_run $@ ;;
     "splash" ) cmd_splash $@ ;;
     "test" ) cmd_test $@ ;;
+    "vcpkg" ) cmd_vcpkg $@ ;;
     * )
         echo "'${cmd}' is not a valid command."
         echo
