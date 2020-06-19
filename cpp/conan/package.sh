@@ -21,6 +21,8 @@ readonly install_folder="${output_dir}"/install
 readonly build_folder="${output_dir}"/build
 readonly package_folder="${output_dir}"/package
 
+# export CONAN_V2_MODE=true
+
 function profile_hint() {
     echo 'See valid profiles using:'
     echo
@@ -52,7 +54,7 @@ function profile_warning() {
 # Extracts the package and version from the root conan file.
 
 function print_name_and_version(){
-    PYTHONPATH="${scripts_dir}"/version_extractor python conanfile.py
+    PYTHONPATH="${scripts_dir}"/version_extractor python3 conanfile.py
 }
 
 function print_package_reference(){
