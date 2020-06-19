@@ -10,3 +10,9 @@ class PrintDetails(type):
 
 class ConanFile(metaclass=PrintDetails):
     pass
+
+class CMake:
+    pass
+
+class tools:
+    pass
