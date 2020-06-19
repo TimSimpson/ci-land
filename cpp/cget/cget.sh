@@ -69,7 +69,7 @@ function cmd_run() {
   "${@}"
   local code="${?}"
   popd
-  exit "${code}"
+  return "${code}"
 }
 
 function cmd_test() {
@@ -90,6 +90,27 @@ function cmd_test_package() {
   popd
 }
 
+function announce() {
+    set +e
+    which figlet
+    if [ "${?}" -eq 0 ]; then
+        figlet -f pagga "${@}"
+    fi
+    set -e
+}
+
+function cmd_all() {
+    announce clean
+    cmd_clean
+    announce build
+    cmd_build
+    announce install
+    cmd_install
+    announce test
+    cmd_test
+    announce 'test package'
+    cmd_test_package
+}
 
 function show_help() {
     echo "Usage: ${script_name} [command]"
@@ -103,6 +124,7 @@ function show_help() {
           test         - run ctest in ${build_dir}
           test_package - builds test pacakge ${test_package_src}
                          in ${test_package_build_dir}
+          all          - runs all (well, most) of the above
     "
 
 }
@@ -117,6 +139,7 @@ readonly cmd="${1}"
 shift 1;
 
 case "${cmd}" in
+    "all" ) cmd_all $@ ;;
     "build" ) cmd_build $@ ;;
     "clean" ) cmd_clean $@ ;;
     "install" ) cmd_install $@ ;;

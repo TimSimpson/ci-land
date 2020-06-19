@@ -178,10 +178,11 @@ function announce() {
     set +e
     which figlet
     if [ "${?}" -eq 0 ]; then
-        figlet -f pagga $1
+        figlet -f pagga "${@}"
     fi
     set -e
 }
+
 function cmd_all(){
     require_valid_profile
     announce clean
