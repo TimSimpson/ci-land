@@ -10,6 +10,9 @@ set +u
 if [ "${CENV_NAME}" == '' ]; then
     CENV_NAME='${CENV_NAME}'
 fi
+if [ "${CGET_PREFIX}" == '' ]; then
+    CGET_PREFIX='${CGET_PREFIX}'
+fi
 set -u
 
 readonly output_dir="${root_dir}/output/cget"
@@ -17,15 +20,24 @@ readonly build_dir="${output_dir}/${CENV_NAME}"
 readonly test_package_src="${root_dir}/test_package"
 readonly test_package_build_dir="${output_dir}/${CENV_NAME}/test_package"
 
+# Tell VCPKG to not use it's own version of CMake / Ninja
+export VCPKG_FORCE_SYSTEM_BINARIES=true
+# Use Vcpkg put into Cget prefix path
+export VCPKG_ROOT="${CGET_PREFIX}/vcpkg"
+
 function require_cenv_name() {
   if [ "${CENV_NAME}" == '${CENV_NAME}' ]; then
       echo 'CENV_NAME environment variable not set. Call `cenv s` to set it.'
       exit 1
   fi
-  if [ "${CGET_PREFIX}" == '' ]; then
+  if [ "${CGET_PREFIX}" == '${CGET_PREFIX}' ]; then
       echo 'CGET_PREFIX was not set. Is cenv / cget properly installed?'
       exit 1
   fi
+}
+
+function cmd_cenvs(){
+  "${scripts_dir}"/cenvs.sh "${@}"
 }
 
 function cmd_clean(){
@@ -116,6 +128,7 @@ function show_help() {
     echo "Usage: ${script_name} [command]"
     echo "
     Commands:
+          cenvs        - Setup / manage C-environments
           clean        - Erase ${build_dir}
           build        - build in ${build_dir}
           install      - install to ${CGET_PREFIX}
@@ -141,6 +154,7 @@ shift 1;
 case "${cmd}" in
     "all" ) cmd_all $@ ;;
     "build" ) cmd_build $@ ;;
+    "cenvs" ) cmd_cenvs $@ ;;
     "clean" ) cmd_clean $@ ;;
     "install" ) cmd_install $@ ;;
     "rebuild" ) cmd_rebuild $@ ;;
