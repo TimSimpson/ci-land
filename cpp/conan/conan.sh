@@ -121,6 +121,53 @@ function cmd_test() {
   popd
 }
 
+function cmd_docs() {
+  "${scripts_dir}"/docs.sh "${@}"
+}
+
+function cmd_st() {
+  local st_project="${build_dir}/cil.sublime-project"
+  echo '
+  {
+  "folders": [
+    {
+      "path": "'"${root_dir}"'"
+    }
+  ],
+  "settings": {
+    "ecc_flags_sources": [
+      {
+        "file": "CMakeLists.txt",
+        "flags":
+        [
+            "-DCMAKE_MODULE_PATH:FILEPATH=\"\";${project_path:${folder}}"
+        ]
+      }
+    ],
+  },
+  "build_systems": [
+    {
+      "file_regex": "(^.*\\.[a-z]*):([0-9]*)",
+      "name": "build",
+      "env": {
+      },
+      "working_dir": "${project_path:${folder}}",
+      "cmd": [
+        "cmake",
+        "--build",
+        "${project_path:${folder}}",
+        "--",
+        "-j4"
+      ]
+    }
+  ]
+}
+' > "${st_project}"
+  echo "Wrote new file to \"${st_project}\"."
+  echo 'Calling Sublime Text...'
+  subl "${st_project}"
+}
+
 
 function show_help() {
     echo "Usage: ${script_name} [command]"
@@ -135,6 +182,8 @@ function show_help() {
           rebuild      - calls CMake directly in ${build_dir}
           run          - install, build, and test
           test         - run ctest in ${build_dir}
+          docs         - build docs in ${output_dir}/docs
+          st           - create Sublime Text project
 
     TODO: maybe remove build and run? 'conan build' and 'conan run' replace them
     "
@@ -161,6 +210,8 @@ case "${cmd}" in
     "rebuild" ) cmd_rebuild $@ ;;
     "run" ) cmd_run $@ ;;
     "test" ) cmd_test $@ ;;
+    "docs" ) cmd_docs $@ ;;
+    "st" ) cmd_st $@ ;;
     * )
         echo "'${cmd}' is not a valid command."
         echo
