@@ -189,6 +189,9 @@ function cmd_all(){
     require_valid_profile
     announce clean
     cmd_clean
+    cmd_re_all
+
+function cmd_re_all(){
     announce source
     cmd_source
     announce install
@@ -240,6 +243,7 @@ function show_help() {
           test         - tests binaries in ${build_folder}
           test_package - tests package "${package_name_and_version}"
           all          - do all of the above
+          re-all       - like all, but skips clean
           create       - run conan create
           upload       - uploads "${package_reference}"
           settings     - show paths and other variables
@@ -269,6 +273,7 @@ case "${cmd}" in
     "test_package" ) cmd_test_package $@ ;;
     "create" ) cmd_create $@ ;;
     "all" ) cmd_all $@ ;;
+    "re-all" ) cmd_re_all $@ ;;
     "upload" ) cmd_upload $@ ;;
     "settings" ) cmd_settings $@ ;;
     * )
