@@ -166,12 +166,14 @@ function cmd_test(){
 }
 
 function cmd_test_package(){
+    local test_package_dir="${1:-test_package}"
+
     export CONAN_SKIP_TESTS=true
     require_valid_profile
     local package_name_and_version=`print_name_and_version`
     local package_reference=`print_package_reference "${package_name_and_version}"`
 
-    conan test test_package -pr="${profile_path}"  --build missing "${package_reference}"
+    conan test "${test_package_dir}" -pr="${profile_path}"  --build missing "${package_reference}"
 }
 
 function announce() {
