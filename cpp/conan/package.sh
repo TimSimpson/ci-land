@@ -190,6 +190,7 @@ function cmd_all(){
     announce clean
     cmd_clean
     cmd_re_all
+}
 
 function cmd_re_all(){
     announce source

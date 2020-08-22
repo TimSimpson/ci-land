@@ -148,7 +148,7 @@ function cmd_st() {
   "build_systems": [
     {
       "file_regex": "(^.*\\.[a-z]*):([0-9]*)",
-      "name": "build",
+      "name": "cmake build",
       "env": {
       },
       "working_dir": "${project_path:${folder}}",
@@ -158,6 +158,17 @@ function cmd_st() {
         "${project_path:${folder}}",
         "--",
         "-j4"
+      ]
+    },
+    {
+      "file_regex": "(^.*\\.[a-z]*):([0-9]*)",
+      "name": "ctest",
+      "working_dir": "${project_path:${folder}}",
+      "env": {
+        "CTEST_OUTPUT_ON_FAILURE": "1"
+      },
+      "cmd": [
+        "ctest"
       ]
     }
   ]
