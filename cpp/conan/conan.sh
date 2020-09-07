@@ -14,7 +14,7 @@ set -u
 
 readonly profile_path="${scripts_dir}/profiles/${PROFILE}"
 
-readonly output_dir="${root_dir}/output"
+readonly output_dir="${root_dir}/output${CIL_OUTPUT_PREFIX}"
 readonly build_dir="${output_dir}/${PROFILE}"
 
 function profile_hint() {
@@ -155,9 +155,7 @@ function cmd_st() {
       "cmd": [
         "cmake",
         "--build",
-        "${project_path:${folder}}",
-        "--",
-        "-j4"
+        "${project_path:${folder}}"
       ]
     },
     {
