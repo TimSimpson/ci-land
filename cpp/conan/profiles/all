@@ -20,5 +20,7 @@ sdl2_image:jpg=False
 sdl2_image:tif=False
 sdl2_image:webp=False
 
+sdl2_mixer:opus=False
+
 [build_requires]
 *:cmake_installer/3.16.1@conan/stable
