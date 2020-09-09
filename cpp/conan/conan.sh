@@ -14,7 +14,7 @@ set -u
 
 readonly profile_path="${scripts_dir}/profiles/${PROFILE}"
 
-readonly output_dir="${root_dir}/output${CIL_OUTPUT_PREFIX}"
+readonly output_dir="${root_dir}/output${CIL_OUTPUT_PREFIX:-}"
 readonly build_dir="${output_dir}/${PROFILE}"
 
 function profile_hint() {
@@ -125,6 +125,14 @@ function cmd_docs() {
   "${scripts_dir}"/docs.sh "${@}"
 }
 
+function cmd_info() {
+  require_valid_profile
+  mkdir -p "${output_dir}"
+  pushd "${output_dir}"
+  conan info "${root_dir}" -pr="${profile_path}"
+  popd
+}
+
 function cmd_st() {
   local st_project="${build_dir}/cil.sublime-project"
   echo '
@@ -192,6 +200,7 @@ function show_help() {
           run          - install, build, and test
           test         - run ctest in ${build_dir}
           docs         - build docs in ${output_dir}/docs
+          info         - see the Conan dep graph
           st           - create Sublime Text project
 
     TODO: maybe remove build and run? 'conan build' and 'conan run' replace them
@@ -220,6 +229,7 @@ case "${cmd}" in
     "run" ) cmd_run $@ ;;
     "test" ) cmd_test $@ ;;
     "docs" ) cmd_docs $@ ;;
+    "info" ) cmd_info $@ ;;
     "st" ) cmd_st $@ ;;
     * )
         echo "'${cmd}' is not a valid command."

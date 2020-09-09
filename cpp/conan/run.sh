@@ -8,7 +8,7 @@ set -euo pipefail
 readonly relative_scripts_dir=$(dirname "${BASH_SOURCE[0]}")
 readonly scripts_dir=$(cd "${relative_scripts_dir}" >/dev/null 2>&1 && pwd)
 readonly root_dir="$(pwd)"
-readonly output_dir="${root_dir}/output${CIL_OUTPUT_PREFIX}"
+readonly output_dir="${root_dir}/output${CIL_OUTPUT_PREFIX:-}"
 readonly profile_path="${scripts_dir}/profiles/${PROFILE}"
 readonly build_dir="${output_dir}/${PROFILE}"
 

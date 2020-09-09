@@ -14,7 +14,7 @@ set -u
 
 readonly profile_path="${scripts_dir}/profiles/${PROFILE}"
 
-readonly output_root_dir="${root_dir}/output${CIL_OUTPUT_PREFIX}/package"
+readonly output_root_dir="${root_dir}/output${CIL_OUTPUT_PREFIX:-}/package"
 readonly output_dir="${output_root_dir}/${PROFILE}"
 readonly source_folder="${output_dir}"/source
 readonly install_folder="${output_dir}"/install

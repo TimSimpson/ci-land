@@ -48,7 +48,13 @@ function cmd_profiles() {
 }
 
 function cmd_run() {
-    "${script_dir}/cpp/conan/run.sh" "${@}"
+    if [ -f "conanfile.py" ]; then
+      "${script_dir}/cpp/conan/run.sh" "${@}"
+    elif [ -f "pyproject.toml" ]; then
+      "${script_dir}/python/run.sh" "${@}"
+    else
+      echo "I don't know what this is!"
+    fi
 }
 
 function cmd_package() {
@@ -57,6 +63,16 @@ function cmd_package() {
 
 function cmd_splash() {
     cat "${script_dir}/splash.txt"
+}
+
+function cmd_st() {
+    if [ -f "conanfile.py" ]; then
+      "${script_dir}/cpp/conan/conan.sh" st "${@}"
+    elif [ -f "pyproject.toml" ]; then
+      "${script_dir}/python/st.sh" "${@}"
+    else
+      echo "I don't know what this is!"
+    fi
 }
 
 function cmd_test() {
@@ -81,6 +97,7 @@ function show_help() {
           package     - Runs package script
           run         - Installs and builds C++ stuff
           splash      - Really important picture with a bird
+          st          - Create and open Sublime Text project
           test        - Run ctests in build directory
     "
 }
@@ -104,6 +121,7 @@ case "${cmd}" in
     "profiles" ) cmd_profiles $@ ;;
     "run" ) cmd_run $@ ;;
     "splash" ) cmd_splash $@ ;;
+    "st" ) cmd_st $@ ;;
     "test" ) cmd_test $@ ;;
     "vcpkg" ) cmd_vcpkg $@ ;;
     * )
