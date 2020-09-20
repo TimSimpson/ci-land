@@ -20,5 +20,15 @@ fi
 mkdir -p "${build_dir}"
 cd "${build_dir}"
 conan install "${root_dir}" -pr="${profile_path}" --build missing
-conan build "${root_dir}"
+set +u
+if [ "${CIL_RUN_CALL_SOURCE}" != '' ]; then
+    set -u
+    readonly download_src_dir="${build_dir}/src"
+    mkdir -p "${download_src_dir}"
+    conan source -sf "${download_src_dir}" "${root_dir}"
+    conan build "${root_dir}" -sf "${download_src_dir}"
+else
+    set -u
+    conan build "${root_dir}"
+fi
 ctest

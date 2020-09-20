@@ -55,7 +55,19 @@ function cmd_bt() {
 function cmd_build() {
   require_valid_profile
   pushd "${build_dir}"
-  conan build "${root_dir}"
+
+  set +u
+  if [ "${CIL_RUN_CALL_SOURCE}" != '' ]; then
+      set -u
+      readonly download_src_dir="${build_dir}/src"
+      mkdir -p "${download_src_dir}"
+      conan source -sf "${download_src_dir}" "${root_dir}"
+      conan build "${root_dir}" -sf "${download_src_dir}"
+  else
+      set -u
+      conan build "${root_dir}"
+  fi
+
   popd
   set +u
   if [[ "${1}" == "test" ]]; then
