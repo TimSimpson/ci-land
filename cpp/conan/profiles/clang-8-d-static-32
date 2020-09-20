@@ -4,10 +4,15 @@ include(clang-8)
 os_build=Linux
 os=Linux
 build_type=Debug
+arch=x86
 arch_target=x86
+arch_build=x86
 
 [options]
 *:shared=False
+
+lp3-sdl:use_basic_sdl2=True
+lp3-engine:use_basic_sdl2=True
 
 sdl2:fPIC=False
 sdl2:alsa=False
@@ -30,6 +35,20 @@ sdl2:iconv=False
 sdl2:video_rpi=False
 sdl2:sdl2main=False
 
+# sdl2_mixer:flac=False
+#sdl2_mixer:fluidsynth=False
+#sdl2_mixer:mad=False
+# sdl2_mixer:mpg123g=False
+# sdl2_mixer:mikmod=False
+#sdl2_mixer:modplug=False
+#sdl2_mixer:nativemidi=False
+#sdl2_mixer:opus=False
+# sdl2_mixer:tinymidi=False
+
+
 [env]
 CMAKE_C_FLAGS=-m32
 CMAKE_CXX_FLAGS=-m32
+
+[build_requires]
+# *:sdl2_mixer/2.0.4.1@TimSimpson/testing
