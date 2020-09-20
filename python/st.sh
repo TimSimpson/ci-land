@@ -17,7 +17,7 @@ if [ -f "pyproject.toml" ]; then
       "file_regex": "(^.*\\.[a-z]*):([0-9]*)",
       "name": "poetry run task checks",
       "working_dir": "${project_path:${folder}}",
-      "shell_cmd": [
+      "cmd": [
         "poetry",
         "run",
         "task",
