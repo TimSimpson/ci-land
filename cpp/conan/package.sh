@@ -180,7 +180,7 @@ function announce() {
     set +e
     which figlet
     if [ "${?}" -eq 0 ]; then
-        figlet -f pagga "${@}"
+        figlet "${@}" # -f pagga "${@}"
     fi
     set -e
 }
