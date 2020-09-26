@@ -28,7 +28,7 @@ def load_conf(path: pathlib.Path) -> ConfFile:
     section = None
     for index, line in enumerate(lines):
         stripped = line.strip()
-        if not stripped:
+        if not stripped or stripped.startswith("#"):
             continue
         elif stripped.startswith('[') and stripped.endswith(']'):
             section = stripped
