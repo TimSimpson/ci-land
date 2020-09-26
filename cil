@@ -52,6 +52,8 @@ function cmd_run() {
       "${script_dir}/cpp/conan/run.sh" "${@}"
     elif [ -f "pyproject.toml" ]; then
       "${script_dir}/python/run.sh" "${@}"
+    elif [ -f "package.json" ]; then
+      "${script_dir}/javascript/run.sh" "${@}"
     else
       echo "I don't know what this is!"
     fi
@@ -70,6 +72,8 @@ function cmd_st() {
       "${script_dir}/cpp/conan/conan.sh" st "${@}"
     elif [ -f "pyproject.toml" ]; then
       "${script_dir}/python/st.sh" "${@}"
+    elif [ -f "package.json" ]; then
+      "${script_dir}/javascript/st.sh" "${@}"
     else
       echo "I don't know what this is!"
     fi
