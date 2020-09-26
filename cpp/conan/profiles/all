@@ -21,6 +21,9 @@ sdl2_image:tif=False
 sdl2_image:webp=False
 
 sdl2_mixer:opus=False
+sdl2_mixer:modplug=False
+sdl2_mixer:fluidsynth=False
+sdl2_mixer:tinymidi=False
 
 [build_requires]
 *:cmake_installer/3.16.1@conan/stable
