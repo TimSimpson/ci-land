@@ -139,6 +139,11 @@ function cmd_build(){
     conan build . "--source-folder=${source_folder}" "--install-folder=${install_folder}" "--build-folder=${build_folder}"
 }
 
+function cmd_sb(){
+    cmd_source
+    cmd_build
+}
+
 function cmd_package(){
     export CONAN_SKIP_TESTS=true
     require_valid_profile
@@ -174,6 +179,12 @@ function cmd_test_package(){
     local package_reference=`print_package_reference "${package_name_and_version}"`
 
     conan test "${test_package_dir}" -pr="${profile_path}"  --build missing "${package_reference}"
+}
+
+function cmd_pet(){
+    cmd_package
+    cmd_export
+    cmd_test_package
 }
 
 function announce() {
@@ -239,10 +250,12 @@ function show_help() {
           source       - run conan source, put in ${source_folder}
           install      - install to ${install_folder}
           build        - build in ${build_folder}
+          sb           - runs source, then build
           package      - package in ${package_folder}
           export       - export package to local cache
           test         - tests binaries in ${build_folder}
           test_package - tests package "${package_name_and_version}"
+          pet          - runs package, export, and test_package
           all          - do all of the above
           re-all       - like all, but skips clean
           create       - run conan create
@@ -268,10 +281,12 @@ case "${cmd}" in
     "source" ) cmd_source $@ ;;
     "install" ) cmd_install $@ ;;
     "build" ) cmd_build $@ ;;
+    "sb" ) cmd_sb $@ ;;
     "package" ) cmd_package $@ ;;
     "export" ) cmd_export $@ ;;
     "test" ) cmd_test $@ ;;
     "test_package" ) cmd_test_package $@ ;;
+    "pet" ) cmd_pet $@ ;;
     "create" ) cmd_create $@ ;;
     "all" ) cmd_all $@ ;;
     "re-all" ) cmd_re_all $@ ;;
