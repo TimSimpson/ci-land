@@ -22,3 +22,6 @@ CC=clang-8
 CXX=clang++-8
 CMAKE_C_COMPILER=clang-8
 CMAKE_CXX_COMPILER=clang++-8
+
+[options]
+sdl2_mixer:tinymidi=False
