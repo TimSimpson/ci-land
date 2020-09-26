@@ -9,9 +9,9 @@ compiler.cppstd=17
 arch=x86_64
 build_type=Debug
 
-[options]
+#[options]
 # Turn off non-Windows SDL2 ops
-sdl2_image:fPIC=False
+#sdl2_image:fPIC=False
 
 [build_requires]
 *:ninja_installer/1.8.2@bincrafters/stable
