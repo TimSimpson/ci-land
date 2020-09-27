@@ -18,6 +18,7 @@ install:
   - ci\\cpp\\conan\\appveyor\\install.bat
 
 build_script:
+  - git submodule update --init --recursive
   - ci\\cpp\\conan\\appveyor\\run.bat %PROFILE%
 """
 

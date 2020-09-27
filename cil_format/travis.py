@@ -17,6 +17,20 @@ clang-linux: &clang-linux
         - clang-8
         - libstdc++-8-dev
         - python3-pip
+        - xorg-dev
+        - libx11-xcb-dev
+        - libxcb-render0-dev
+        - libxcb-render-util0-dev
+        - libxcb-xkb-dev
+        - libxcb-icccm4-dev
+        - libxcb-image0-dev
+        - libxcb-keysyms1-dev
+        - libxcb-shape0-dev
+        - libxcb-sync-dev
+        - libxcb-xfixes0-dev
+        - libxcb-xinerama0-dev
+        - libxcb-randr0-dev
+        - autoconf
 
 emscripten: &emscripten
   os: linux
@@ -39,6 +53,7 @@ install:
   - ./ci/cpp/conan/travis/install.sh
 
 script:
+  - git submodule update --init --recursive
   - ./ci/cpp/conan/travis/run.sh
 
 matrix:
