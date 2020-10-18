@@ -12,8 +12,14 @@ if "%arg%"=="" (
     exit /b 1
 )
 
-if "%arg%"=="run" GOTO cmd_run
-
+if "%arg%"=="run" (
+    CALL "%script_dir%\cpp\conan\conan.bat" run %2 %3 %4 %5 %6 %7 %8 %9
+    exit /b %ERRORLEVEL%
+)
+if "%arg%"=="build" (
+    CALL :cmd_run
+    exit /b %ERRORLEVEL%
+)
 if "%arg%"=="conan" (
     CALL :cmd_conan %*
     exit /b %ERRORLEVEL%
