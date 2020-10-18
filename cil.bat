@@ -12,10 +12,8 @@ if "%arg%"=="" (
     exit /b 1
 )
 
-if "%arg%"=="build" (
-    CALL :cmd_run
-    exit /b %ERRORLEVEL%
-)
+if "%arg%"=="run" GOTO cmd_run
+
 if "%arg%"=="conan" (
     CALL :cmd_conan %*
     exit /b %ERRORLEVEL%

@@ -95,6 +95,10 @@ GOTO :EOF
 
 :cmd_bt
     CALL :cmd_build
+    if not %ERRORLEVEL%==0 (
+        cd %root_dir%
+        exit /b %ERRORLEVEL%
+    )
     CALL :cmd_test
 GOTO :EOF
 

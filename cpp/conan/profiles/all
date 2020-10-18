@@ -2,6 +2,8 @@
 # Avoid building boost for ten hours in CI
 boost:header_only=True
 
+sdl2:sdl2main=False
+
 # Avoid the ten thousand metric tons of stuff Bincrafters pulls in for
 # sdl2_image. Thanks but no thanks guys!
 sdl2_image:bmp=True
