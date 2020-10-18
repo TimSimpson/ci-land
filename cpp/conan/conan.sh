@@ -197,6 +197,16 @@ function cmd_st() {
   subl "${st_project}"
 }
 
+function cmd_vsc() {
+  # VSCode just HAS to put it's garbage here
+  local vscode_build_path="${root_dir}/build"
+  require_valid_profile
+  mkdir -p "${vscode_build_path}"
+  pushd "${vscode_build_path}"
+  conan install "${root_dir}" -pr="${profile_path}" --build missing
+  conan build "${root_dir}"
+  popd
+}
 
 function show_help() {
     echo "Usage: ${script_name} [command]"
@@ -214,6 +224,7 @@ function show_help() {
           docs         - build docs in ${output_dir}/docs
           info         - see the Conan dep graph
           st           - create Sublime Text project
+          vsc          - run install and build in build dir for VSCode
 
     TODO: maybe remove build and run? 'conan build' and 'conan run' replace them
     "
@@ -243,6 +254,7 @@ case "${cmd}" in
     "docs" ) cmd_docs $@ ;;
     "info" ) cmd_info $@ ;;
     "st" ) cmd_st $@ ;;
+    "vsc" ) cmd_vsc $@ ;;
     * )
         echo "'${cmd}' is not a valid command."
         echo
